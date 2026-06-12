@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shop - Bloom Boutique{% endblock %}
+
+{% block content %}
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <h1>{% if current_category %}{{ current_category.name }}{% else %}Our Collection{% endif %}</h1>
+  <p>{% if current_category %}Browsing {{ current_category.name }}{% else %}Discover all our curated pieces{% endif %}
+  </p>
+</div>
+
+<!-- ── CATEGORY FILTER TABS ── -->
+<div style="display:flex; gap:0.75rem; flex-wrap:wrap;
+            justify-content:center; padding: 1.5rem 2rem 0;">
+
+  <a href="{% url 'product_list' %}"
+    class="btn {% if not current_category %}btn-primary{% else %}btn-outline{% endif %}">
+    All
+  </a>
+
+  {% for category in categories %}
+  <a href="{% url 'product_list' %}?category={{ category.slug }}"
+    class="btn {% if current_category.slug == category.slug %}btn-primary{% else %}btn-outline{% endif %}">
+    {{ category.name }}
+  </a>
+  {% endfor %}
+
+</div>
+
+<!-- ── PRODUCTS GRID ── -->
+{% if products %}
+<div class="products-grid">
+  {% for product in products %}
+  <div class="product-card">
+
+    <a href="{% url 'product_detail' product.slug %}">
+      {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-card-image">
+      {% else %}
+      <div class="product-card-image-placeholder">🌸</div>
+      {% endif %}
+    </a>
+
+    <div class="product-card-body">
+      <p class="product-category-tag">{{ product.category.name }}</p>
+      <h3 class="product-card-title">
+        <a href="{% url 'product_detail' product.slug %}">
+          {{ product.name }}
+        </a>
+      </h3>
+      <p class="product-card-price">${{ product.price }}</p>
+    </div>
+
+    <div class="product-card-footer">
+      <a href="{% url 'product_detail' product.slug %}" class="btn btn-outline">View</a>
+      <a href="{% url 'cart_add' product.id %}" class="btn btn-primary">Add to Cart</a>
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-state">
+  <span class="emoji">🔍</span>
+  <h3>No Products Found</h3>
+  <p>Try browsing a different category</p>
+  <a href="{% url 'product_list' %}" class="btn btn-primary">View All</a>
+</div>
+{% endif %}
+
+{% endblock %}

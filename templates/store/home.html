@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Bloom Boutique{% endblock %}
+
+{% block content %}
+
+<!-- ── HERO SECTION ── -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>Elegant Living Starts Here</h1>
+    <p>Discover our curated collection of beautiful pieces<br>crafted for the modern woman</p>
+    <a href="{% url 'product_list' %}" class="btn btn-white">
+      Shop Now ✿
+    </a>
+  </div>
+</div>
+
+<!-- ── CATEGORIES SECTION ── -->
+{% if categories %}
+<div class="section-title">
+  <h2>Shop by Category</h2>
+  <p>Find exactly what you're looking for</p>
+  <div class="section-divider"></div>
+</div>
+
+<div class="categories-grid">
+  {% for category in categories %}
+  <a href="{% url 'product_list' %}?category={{ category.slug }}" class="category-card">
+    <span class="emoji">
+      {% if category.slug == 'clothing' %}👗
+      {% elif category.slug == 'accessories' %}💍
+      {% elif category.slug == 'home-living' %}🕯️
+      {% else %}✿{% endif %}
+    </span>
+    <h3>{{ category.name }}</h3>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- ── FEATURED PRODUCTS ── -->
+<div class="section-title">
+  <h2>Featured Collection</h2>
+  <p>Handpicked pieces just for you</p>
+  <div class="section-divider"></div>
+</div>
+
+{% if products %}
+<div class="products-grid">
+  {% for product in products %}
+  <div class="product-card">
+
+    <!-- Product Image -->
+    <a href="{% url 'product_detail' product.slug %}">
+      {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-card-image">
+      {% else %}
+      <div class="product-card-image-placeholder">🌸</div>
+      {% endif %}
+    </a>
+
+    <!-- Product Info -->
+    <div class="product-card-body">
+      <p class="product-category-tag">{{ product.category.name }}</p>
+      <h3 class="product-card-title">
+        <a href="{% url 'product_detail' product.slug %}">
+          {{ product.name }}
+        </a>
+      </h3>
+      <p class="product-card-price">${{ product.price }}</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="product-card-footer">
+      <a href="{% url 'product_detail' product.slug %}" class="btn btn-outline">View</a>
+      <a href="{% url 'cart_add' product.id %}" class="btn btn-primary">Add to Cart</a>
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+
+<div style="text-align:center; padding: 2rem 0 3rem;">
+  <a href="{% url 'product_list' %}" class="btn btn-primary">
+    View All Products →
+  </a>
+</div>
+
+{% else %}
+<div class="empty-state">
+  <span class="emoji">🌸</span>
+  <h3>Collection Coming Soon</h3>
+  <p>We're curating beautiful pieces for you!</p>
+</div>
+{% endif %}
+
+{% endblock %}

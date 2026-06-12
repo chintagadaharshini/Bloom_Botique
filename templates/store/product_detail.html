@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - Bloom Boutique{% endblock %}
+
+{% block content %}
+
+<!-- ── PRODUCT DETAIL ── -->
+<div class="product-detail-container">
+
+  <!-- Left: Image -->
+  <div class="product-detail-image">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% else %}
+      <div class="product-detail-image-placeholder">🌸</div>
+    {% endif %}
+  </div>
+
+  <!-- Right: Info -->
+  <div class="product-detail-info">
+    <p class="product-detail-category">{{ product.category.name }}</p>
+    <h1 class="product-detail-title">{{ product.name }}</h1>
+    <p class="product-detail-price">${{ product.price }}</p>
+
+    <!-- Stock Badge -->
+    {% if product.stock > 0 %}
+      <span class="stock-badge in-stock">✓ In Stock ({{ product.stock }} available)</span>
+    {% else %}
+      <span class="stock-badge out-of-stock">✗ Out of Stock</span>
+    {% endif %}
+
+    <p class="product-detail-description">{{ product.description }}</p>
+
+    <!-- Add to Cart -->
+    {% if product.stock > 0 %}
+    <div style="display:flex; gap:1rem; margin-top:1rem;">
+      <a href="{% url 'cart_add' product.id %}"
+         class="btn btn-primary" style="flex:1; text-align:center;">
+        🛒 Add to Cart
+      </a>
+      <a href="{% url 'product_list' %}"
+         class="btn btn-outline">
+        ← Back
+      </a>
+    </div>
+    {% else %}
+    <a href="{% url 'product_list' %}" class="btn btn-outline">
+      ← Back to Shop
+    </a>
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- ── RELATED PRODUCTS ── -->
+{% if related_products %}
+<div class="section-title" style="margin-top:3rem;">
+  <h2>You May Also Like</h2>
+  <div class="section-divider"></div>
+</div>
+
+<div class="products-grid">
+  {% for item in related_products %}
+  <div class="product-card">
+    <a href="{% url 'product_detail' item.slug %}">
+      {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-card-image">
+      {% else %}
+        <div class="product-card-image-placeholder">🌸</div>
+      {% endif %}
+    </a>
+    <div class="product-card-body">
+      <p class="product-category-tag">{{ item.category.name }}</p>
+      <h3 class="product-card-title">
+        <a href="{% url 'product_detail' item.slug %}">{{ item.name }}</a>
+      </h3>
+      <p class="product-card-price">${{ item.price }}</p>
+    </div>
+    <div class="product-card-footer">
+      <a href="{% url 'product_detail' item.slug %}" class="btn btn-outline">View</a>
+      <a href="{% url 'cart_add' item.id %}" class="btn btn-primary">Add to Cart</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

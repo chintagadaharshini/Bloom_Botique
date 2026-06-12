@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Profile - Bloom Boutique{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+        </div>
+        <div class="profile-info">
+            <h2>{{ user.get_full_name|default:user.username }}</h2>
+            <p>{{ user.email }}</p>
+            <p style="opacity:0.75; font-size:0.85rem;">
+                Member since {{ user.date_joined|date:"F Y" }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Orders Section -->
+    <h3 style="font-family:'Playfair Display',serif;
+             color:var(--dark-purple);
+             margin-bottom:1rem;">
+        My Orders
+    </h3>
+
+    {% if orders %}
+    <div class="orders-list">
+        {% for order in orders %}
+        <div class="order-card">
+            <div>
+                <p style="font-weight:600; color:var(--text-dark);">
+                    Order #{{ order.id }}
+                </p>
+                <p style="font-size:0.85rem; color:var(--text-light);">
+                    {{ order.created_at|date:"d M Y" }} ·
+                    {{ order.items.count }} item(s)
+                </p>
+            </div>
+            <div style="text-align:right;">
+                <p style="font-weight:600; color:var(--dark-purple);">
+                    ${{ order.total_price }}
+                </p>
+                <span class="order-status status-{{ order.status }}">
+                    {{ order.get_status_display }}
+                </span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <span class="emoji">🛍️</span>
+        <h3>No Orders Yet</h3>
+        <p>Start shopping to see your orders here!</p>
+        <a href="{% url 'product_list' %}" class="btn btn-primary">
+            Shop Now ✿
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

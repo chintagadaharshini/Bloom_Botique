@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Bloom Boutique{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <a href="{% url 'home' %}" class="navbar-brand">
+      Bloom<span>✿</span>Boutique
+    </a>
+
+    <ul class="navbar-nav">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'product_list' %}">Shop</a></li>
+
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'profile' %}">Profile</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li>
+          <a href="{% url 'cart' %}" class="cart-icon">
+            🛒 Cart
+            {% if cart_count %}
+              <span class="cart-badge">{{ cart_count }}</span>
+            {% endif %}
+          </a>
+        </li>
+      {% else %}
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'register' %}">Register</a></li>
+        <li>
+          <a href="{% url 'cart' %}" class="cart-icon">
+            🛒 Cart
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+
+    <div class="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ── MESSAGES ── -->
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- ── PAGE CONTENT ── -->
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>Bloom✿Boutique</h3>
+        <p>Curated collections for the modern woman.<br>
+           Elegant, minimal, and timeless.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="{% url 'product_list' %}">All Products</a></li>
+          <li><a href="{% url 'home' %}">New Arrivals</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Account</h4>
+        <ul>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'profile' %}">My Profile</a></li>
+            <li><a href="{% url 'cart' %}">My Cart</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Bloom Boutique. Made with 💜 for elegant shopping.</p>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

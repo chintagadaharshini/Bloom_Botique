@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}Order Confirmed - Bloom Boutique{% endblock %}
+
+{% block content %}
+
+<!-- Success Banner -->
+<div style="background:linear-gradient(135deg, var(--lavender), var(--soft-purple));
+            padding:3rem 2rem; text-align:center; color:white;">
+    <div style="font-size:4rem; margin-bottom:1rem;">🎉</div>
+    <h1 style="font-size:2rem; margin-bottom:0.5rem;">
+        Order Confirmed!
+    </h1>
+    <p style="opacity:0.9;">
+        Thank you for shopping with Bloom Boutique
+    </p>
+    <div style="background:rgba(255,255,255,0.2);
+              display:inline-block; padding:0.5rem 1.5rem;
+              border-radius:30px; margin-top:1rem;
+              font-weight:600; font-size:1.1rem;">
+        Order #{{ order.id }}
+    </div>
+</div>
+
+<!-- Order Details -->
+<div style="max-width:700px; margin:2rem auto; padding:0 2rem;">
+
+    <!-- Delivery Info -->
+    <div style="background:white; border-radius:20px;
+              padding:1.5rem; box-shadow:var(--shadow-soft);
+              margin-bottom:1.5rem;">
+        <h3 style="font-family:'Playfair Display',serif;
+               color:var(--dark-purple); margin-bottom:1rem;">
+            📦 Delivery Information
+        </h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div>
+                <p style="font-size:0.8rem; color:var(--text-light);">Full Name</p>
+                <p style="font-weight:600;">{{ order.full_name }}</p>
+            </div>
+            <div>
+                <p style="font-size:0.8rem; color:var(--text-light);">Email</p>
+                <p style="font-weight:600;">{{ order.email }}</p>
+            </div>
+            <div>
+                <p style="font-size:0.8rem; color:var(--text-light);">Phone</p>
+                <p style="font-weight:600;">{{ order.phone }}</p>
+            </div>
+            <div>
+                <p style="font-size:0.8rem; color:var(--text-light);">City</p>
+                <p style="font-weight:600;">{{ order.city }}</p>
+            </div>
+            <div style="grid-column:span 2;">
+                <p style="font-size:0.8rem; color:var(--text-light);">Address</p>
+                <p style="font-weight:600;">{{ order.address }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Items -->
+    <div style="background:white; border-radius:20px;
+              padding:1.5rem; box-shadow:var(--shadow-soft);
+              margin-bottom:1.5rem;">
+        <h3 style="font-family:'Playfair Display',serif;
+               color:var(--dark-purple); margin-bottom:1rem;">
+            🛍️ Items Ordered
+        </h3>
+
+        {% for item in order_items %}
+        <div style="display:flex; justify-content:space-between;
+                align-items:center; padding:0.75rem 0;
+                border-bottom:1px solid var(--light-gray);">
+            <div style="display:flex; align-items:center; gap:1rem;">
+                {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" style="width:50px; height:50px;
+                      object-fit:cover; border-radius:8px;">
+                {% else %}
+                <div style="width:50px; height:50px;
+                      background:var(--lavender);
+                      border-radius:8px; display:flex;
+                      align-items:center; justify-content:center;">
+                    🌸
+                </div>
+                {% endif %}
+                <div>
+                    <p style="font-weight:600;">{{ item.product.name }}</p>
+                    <p style="font-size:0.85rem; color:var(--text-light);">
+                        Qty: {{ item.quantity }} × ${{ item.price }}
+                    </p>
+                </div>
+            </div>
+            <p style="font-weight:700; color:var(--dark-purple);">
+                ${{ item.get_subtotal }}
+            </p>
+        </div>
+        {% endfor %}
+
+        <!-- Total -->
+        <div style="display:flex; justify-content:space-between;
+                padding-top:1rem; font-size:1.1rem;
+                font-weight:700; color:var(--dark-purple);">
+            <span>Total Paid</span>
+            <span>${{ order.total_price }}</span>
+        </div>
+    </div>
+
+    <!-- Order Status -->
+    <div style="background:white; border-radius:20px;
+              padding:1.5rem; box-shadow:var(--shadow-soft);
+              margin-bottom:1.5rem; text-align:center;">
+        <p style="color:var(--text-light); font-size:0.9rem;
+              margin-bottom:0.5rem;">Order Status</p>
+        <span class="order-status status-{{ order.status }}" style="font-size:1rem; padding:0.5rem 1.5rem;">
+            {{ order.get_status_display }}
+        </span>
+        <p style="color:var(--text-light); font-size:0.85rem;
+              margin-top:1rem;">
+            Placed on {{ order.created_at|date:"d F Y, g:i A" }}
+        </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display:flex; gap:1rem; justify-content:center;
+              padding-bottom:3rem;">
+        <a href="{% url 'product_list' %}" class="btn btn-primary">
+            Continue Shopping ✿
+        </a>
+        <a href="{% url 'profile' %}" class="btn btn-outline">
+            View My Orders
+        </a>
+    </div>
+
+</div>
+{% endblock %}
