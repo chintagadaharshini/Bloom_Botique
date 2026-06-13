@@ -43,7 +43,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='products/', blank=True)
+    image = models.URLField(max_length=500, blank=True)
     stock = models.PositiveIntegerField(default=0)
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)  # Set once on creation
@@ -172,3 +172,5 @@ class OrderItem(models.Model):
 
     def get_subtotal(self):
         return self.price * self.quantity
+    
+    
