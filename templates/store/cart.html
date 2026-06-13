@@ -23,14 +23,13 @@
                border-bottom:2px solid var(--light-gray);">
             Your Items
         </h3>
-
         {% for item in cart_items %}
         <div class="cart-item">
 
             <!-- Product Image -->
             <div>
                 {% if item.product.image %}
-                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="cart-item-image">
+                <img src="{{ item.product.image }}" alt="{{ item.product.name }}" class="cart-item-image">
                 {% else %}
                 <div class="cart-item-image" style="background:linear-gradient(135deg,var(--lavender),var(--cream));
                       display:flex; align-items:center;

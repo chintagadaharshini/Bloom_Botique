@@ -54,7 +54,7 @@
     <!-- Product Image -->
     <a href="{% url 'product_detail' product.slug %}">
       {% if product.image %}
-      <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-card-image">
+      <img src="{{ product.image }}" alt="{{ product.name }}" class="product-card-image">
       {% else %}
       <div class="product-card-image-placeholder">🌸</div>
       {% endif %}
