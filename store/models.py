@@ -33,35 +33,7 @@ class Category(models.Model):
 # PRODUCT MODEL
 # Represents individual products in store
 # ─────────────────────────────────────────
-class Product(models.Model):
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.CASCADE,   # If category deleted, delete its products too
-        related_name='products'     # Access products via category.products.all()
-    )
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True)
-    description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.URLField(max_length=500, blank=True)
-    stock = models.PositiveIntegerField(default=0)
-    is_available = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)  # Set once on creation
-    updated_at = models.DateTimeField(auto_now=True)      # Updated on every save
-
-    class Meta:
-        ordering = ['-created_at']  # Newest products first
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
-
-# ─────────────────────────────────────────
+# ────────────────────────────────────────
 # CART MODEL
 # One cart per user (created when needed)
 # ─────────────────────────────────────────
